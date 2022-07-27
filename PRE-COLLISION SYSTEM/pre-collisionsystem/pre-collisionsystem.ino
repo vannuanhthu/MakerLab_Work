@@ -27,7 +27,9 @@ int crashDis = 10;
 double valueDiscm = 0;
 
 void setup() {
+  Serial.begin(9600);  // We initialize serial connection so that we could print values from sensor.
   lcd.init();
+  
   //Thiet lap LED va BUZZER o trang thai OUTPUT
   pinMode(LedRED_Pin, OUTPUT); // pinMode(A1, OUTPUT);
   pinMode(LedYELLOW_Pin, OUTPUT);
@@ -39,6 +41,7 @@ void loop() {
   // Every 500 miliseconds, do a measurement using the sensor and print the distance in centimeters.
   if (distanceSensor.available() == true) {
     valueDiscm = distanceSensor.getcm();
+    Serial.println(valueDiscm);
     lcd.setCursor(1, 1);
     lcd.print(String(valueDiscm)); //Hien thi gia tri khoang cach sau khi cam bien nhan duoc gia tri
     lcd.print(" cm"); 
@@ -59,7 +62,7 @@ void loop() {
     
     //Bat cac canh bao
     digitalWrite(LedGREEN_Pin, HIGH);
-    analogWrite(D9, 153); Dat gia tri PWM de dieu chinh am luong BUZZER 60%
+    analogWrite(D9, 153); //Dat gia tri PWM de dieu chinh am luong BUZZER 60%
     delay(1500);
     
     //Tat cac canh bao
