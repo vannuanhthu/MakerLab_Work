@@ -22,14 +22,14 @@ int Buzzer_Pin = D9;
 //Dat gia tri cho cac khoang cach
 int safeDis = 40;
 int dangerDis = 25;
-int crashDis = 10;
+int crashDis = 13;
 
 double valueDiscm = 0;
 
 void setup() {
   Serial.begin(9600);  // We initialize serial connection so that we could print values from sensor.
   lcd.init();
-  
+  lcd.backlight();
   //Thiet lap LED va BUZZER o trang thai OUTPUT
   pinMode(LedRED_Pin, OUTPUT); // pinMode(A1, OUTPUT);
   pinMode(LedYELLOW_Pin, OUTPUT);
@@ -50,14 +50,14 @@ void loop() {
   if (valueDiscm > safeDis) {
     lcd.clear();
     lcd.setCursor(1, 2);
-    lcd.print("Safe Distance"); //Hien thi trang thai khoang cach
+    lcd.print("SafeDist"); //Hien thi trang thai khoang cach
     delay(500);
   }
    if (valueDiscm < safeDis && valueDiscm > dangerDis) {
      //
     lcd.clear();
-    lcd.setCursor(1, 2);
-    lcd.print("Obstacle"); //There is an obstacle? //Hien thi trang thai khoang cach
+    lcd.(1, 2);
+    lcd.print("Dangerous"); //There is an obstacle? //Hien thi trang thai khoang cach
     delay(500);
     
     //Bat cac canh bao
@@ -74,7 +74,7 @@ void loop() {
      //
     lcd.clear();
     lcd.setCursor(1, 2);
-    lcd.print("About to Obstacle"); //ggdich a nhen //Hien thi trang thai khoang cach
+    lcd.print("Dangerous"); //Hien thi trang thai khoang cach
     delay(500);
     
     //Bat cac canh bao
@@ -93,7 +93,7 @@ void loop() {
      //
     lcd.clear();
     lcd.setCursor(1, 2);
-    lcd.print("Collide"); //Hien thi trang thai khoang cach
+    lcd.print("Crash"); //Hien thi trang thai khoang cach
     delay(500);
     
     //Bat cac canh bao
