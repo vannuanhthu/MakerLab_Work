@@ -5,6 +5,7 @@
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
 
+//
 #define TRIG_PIN  13
 #define ECHO_PIN  12
 
@@ -39,83 +40,100 @@ void setup() {
 
 void loop() {
   // Every 500 miliseconds, do a measurement using the sensor and print the distance in centimeters.
+  delay(500);
   if (distanceSensor.available() == true) {
-    LCD.clear();
-    LCD.setCursor(0, 1);
+    // LCD.clear();
+    LCD.setCursor(0, 0);
     int_dist = floor(distanceSensor.getcm());
     LCD.print("Distance: ");
     LCD.print(int_dist);
     LCD.print("cm");
-    LCD.setCursor(0, 0);
+    LCD.setCursor(0, 1);
   }
-   if (int_dist > int_safe_dist) {
-      // In trang thai khoang cach
-      LCD.print("AN TOAN");
+  if (int_dist > int_safe_dist) {
+    // In trang thai khoang cach
+   //LCD.setCursor(0, 1);
+    LCD.print("AN TOAN      "); 
+    //Ham trang thai cua LED va Buzzer
+    SafeDist();
   }
-   if (int_dist < int_safe_dist && int_dist > int_danger_dist) {
-      // In trang thai khoang cach
-      LCD.print("CO VAT CAN"); 
-      //Ham trang thai cua LED va Buzzer
-      DangerDist1();
+  if ((int_dist <= int_safe_dist) && (int_dist > int_danger_dist)) {
+    // In trang thai khoang cach
+    //LCD.setCursor(0, 1);
+    LCD.print("CO VAT CAN  ");
+    //Ham trang thai cua LED va Buzzer
+    DangerDist1();
   }
-  if (int_dist < int_danger_dist && int_dist > int_crash_dist) {
-      // In trang thai khoang cach
-      LCD.print("SAP VA CHAM"); 
-      //Ham trang thai cua LED va Buzzer
-      DangerDist2();
+  if ((int_dist <= int_danger_dist) && (int_dist > int_crash_dist)) {
+    // In trang thai khoang cach
+    //LCD.setCursor(0, 1);
+    LCD.print("SAP VA CHAM  ");
+    //Ham trang thai cua LED va Buzzer
+    DangerDist2();
   }
-  if (int_dist < int_crash_dist) {
-      // In trang thai khoang cach
-      LCD.print("VA CHAM"); 
-      //Ham trang thai cua LED va Buzzer
-      CrashDist();
+  if (int_dist <= int_crash_dist) {
+    // In trang thai khoang cach
+    //LCD.setCursor(0, 1);
+    LCD.print("VA CHAM      ");
+    //Ham trang thai cua LED va Buzzer
+    CrashDist();
   }
 }
 
-void DangerDist1() {
-  //Bat cac canh bao
-  digitalWrite(LED_GREEN_PIN, HIGH);
-  digitalWrite(BUZZER_PIN, HIGH);
-  analogWrite(D9, 153); //Dat gia tri PWM de dieu chinh am luong BUZZER 60%
-  delay(1500);
+void SafeDist() {
+//Tat cac canh bao
+digitalWrite(LED_GREEN_PIN, LOW);
+digitalWrite(LED_YELLOW_PIN, LOW);
+digitalWrite(LED_RED_PIN, LOW);
+digitalWrite(BUZZER_PIN, LOW);
+}
 
-  //Tat cac canh bao
-  digitalWrite(LED_GREEN_PIN, LOW);
-  digitalWrite(BUZZER_PIN, LOW);
-  analogWrite(D9, 0);
-  delay(500);
-  }
-  
-void DangerDist2(){  
+void DangerDist1() {
+//Bat cac canh bao
+digitalWrite(LED_GREEN_PIN, HIGH);
+digitalWrite(LED_YELLOW_PIN, LOW);
+digitalWrite(LED_RED_PIN, LOW);
+//digitalWrite(BUZZER_PIN, HIGH);
+analogWrite(BUZZER_PIN, 153); //Dat gia tri PWM de dieu chinh am luong BUZZER 60%
+delay(300);
+
+//Tat cac canh bao
+digitalWrite(LED_GREEN_PIN, LOW);
+//digitalWrite(BUZZER_PIN, LOW);
+analogWrite(BUZZER_PIN, 0);
+// delay(50);
+}
+
+void DangerDist2() {
   //Bat cac canh bao
   digitalWrite(LED_GREEN_PIN, HIGH);
   digitalWrite(LED_YELLOW_PIN, HIGH);
-  digitalWrite(BUZZER_PIN, HIGH);
-  analogWrite(D9, 204); //Dat gia tri PWM de dieu chinh am luong BUZZER 80%
-  delay(500);
+  digitalWrite(LED_RED_PIN, LOW);
+  //digitalWrite(BUZZER_PIN, HIGH);
+  analogWrite(BUZZER_PIN, 204); //Dat gia tri PWM de dieu chinh am luong BUZZER 80%
+  delay(100);
 
   //Tat cac canh bao
   digitalWrite(LED_GREEN_PIN, LOW);
   digitalWrite(LED_YELLOW_PIN, LOW);
-  digitalWrite(BUZZER_PIN, LOW);
-  analogWrite(D9, 0); //Dat gia tri PWM de dieu chinh am luong BUZZER 0%
-  delay(500);
-  }
+  //digitalWrite(BUZZER_PIN, LOW);
+  analogWrite(BUZZER_PIN, 0); //Dat gia tri PWM de dieu chinh am luong BUZZER 0%
+  // delay(50);
+}
 
 void CrashDist() {
-      //Bat cac canh bao
-      digitalWrite(LED_GREEN_PIN, HIGH);
-      digitalWrite(LED_YELLOW_PIN, HIGH);
-      digitalWrite(LED_GREEN_PIN, HIGH);
-      digitalWrite(BUZZER_PIN, HIGH);
-      analogWrite(D9, 255); //Dat gia tri PWM de dieu chinh am luong BUZZER 100%
-  
-      //Tat cac canh bao
-      digitalWrite(LED_GREEN_PIN, LOW);
-      digitalWrite(LED_YELLOW_PIN, LOW);
-      digitalWrite(LED_GREEN_PIN, LOW);
-      digitalWrite(BUZZER_PIN, LOW);
-      analogWrite(D9, 0); //Dat gia tri PWM de dieu chinh am luong BUZZER 0%
-      delay(2500);
-      LCD.clear();
-    }
+  //Bat cac canh bao
+  digitalWrite(LED_GREEN_PIN, HIGH);
+  digitalWrite(LED_YELLOW_PIN, HIGH);
+  digitalWrite(LED_RED_PIN, HIGH);
+  //digitalWrite(BUZZER_PIN, HIGH);
+  analogWrite(BUZZER_PIN, 255); //Dat gia tri PWM de dieu chinh am luong BUZZER 100%
+
+  // digitalWrite(LED_GREEN_PIN, LOW);
+  // digitalWrite(LED_YELLOW_PIN, LOW);
+  // digitalWrite(LED_RED_PIN, LOW);
+  // digitalWrite(BUZZER_PIN, LOW);
+  // analogWrite(D9, 0); //Dat gia tri PWM de dieu chinh am luong BUZZER 0%
+  // //delay(50);
+
+}
