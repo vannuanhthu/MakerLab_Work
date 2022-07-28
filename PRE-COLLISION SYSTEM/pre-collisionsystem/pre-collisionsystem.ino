@@ -5,17 +5,17 @@
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
 
-//
+//Xac dinh cong ket noi chan cam bien sieu am
 #define TRIG_PIN  13
 #define ECHO_PIN  12
 
-//Dat ten cong ket noi chan LED va BUZZER
+//Xac dinh cong ket noi chan LED va BUZZER
 #define LED_RED_PIN       A1
 #define LED_YELLOW_PIN    A2
 #define LED_GREEN_PIN     A3
 #define BUZZER_PIN        D9
 
-//Dat gia tri cho cac khoang cach
+//Xac dinh gia tri cho cac khoang cach
 #define int_safe_dist    40
 #define int_danger_dist  25
 #define int_crash_dist   10
@@ -81,27 +81,27 @@ void loop() {
 }
 
 void SafeDist() {
-//Tat cac canh bao
-digitalWrite(LED_GREEN_PIN, LOW);
-digitalWrite(LED_YELLOW_PIN, LOW);
-digitalWrite(LED_RED_PIN, LOW);
-digitalWrite(BUZZER_PIN, LOW);
+  //Tat cac canh bao
+  digitalWrite(LED_GREEN_PIN, LOW);
+  digitalWrite(LED_YELLOW_PIN, LOW);
+  digitalWrite(LED_RED_PIN, LOW);
+  digitalWrite(BUZZER_PIN, LOW);
 }
 
 void DangerDist1() {
-//Bat cac canh bao
-digitalWrite(LED_GREEN_PIN, HIGH);
-digitalWrite(LED_YELLOW_PIN, LOW);
-digitalWrite(LED_RED_PIN, LOW);
-//digitalWrite(BUZZER_PIN, HIGH);
-analogWrite(BUZZER_PIN, 153); //Dat gia tri PWM de dieu chinh am luong BUZZER 60%
-delay(300);
+  //Bat cac canh bao
+  digitalWrite(LED_GREEN_PIN, HIGH);
+  digitalWrite(LED_YELLOW_PIN, LOW);
+  digitalWrite(LED_RED_PIN, LOW);
+  //digitalWrite(BUZZER_PIN, HIGH);
+  analogWrite(BUZZER_PIN, 153); //Dat gia tri PWM de dieu chinh am luong BUZZER 60%
+  delay(300);
 
-//Tat cac canh bao
-digitalWrite(LED_GREEN_PIN, LOW);
-//digitalWrite(BUZZER_PIN, LOW);
-analogWrite(BUZZER_PIN, 0);
-// delay(50);
+  //Tat cac canh bao
+  digitalWrite(LED_GREEN_PIN, LOW);
+  //digitalWrite(BUZZER_PIN, LOW);
+  analogWrite(BUZZER_PIN, 0);
+  // delay(50);
 }
 
 void DangerDist2() {
