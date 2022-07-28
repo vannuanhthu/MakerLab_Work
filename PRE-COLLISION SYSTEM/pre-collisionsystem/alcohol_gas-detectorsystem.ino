@@ -21,10 +21,10 @@ int gasValue  = 0;
 int alcoValue = 0;
 
 // Khai bao gia tri nguong 
-int alcol_limit1  = 200;
-int gas_limit1    = 600;
-int alcol_limit2 = 150;
-int gas_limit2   = 100;
+int alcol_limit  = 20;
+int gas_limit    = 60;
+int alcol_limit2 = 15;
+int gas_limit2   = 10;
 
 void setup(){
     Serial.begin(9600);
@@ -47,7 +47,7 @@ void loop(){
     LCD.print("Alcohol ");
     LCD.setCursor(9, 1);
     LCD.print(alcoValue);
-  if ((alcoValue < alcol_limit2) && (gasValue < gas_limit2)) {
+    if ((alcoValue < alcol_limit2) && (gasValue < gas_limit2)) {
     //Ham trang thai cua LED va Buzzer
     SafeAir();
   }
@@ -75,12 +75,11 @@ void DangerAir() {
   digitalWrite(LED_YELLOW_PIN, HIGH);
   digitalWrite(LED_RED_PIN, LOW);
   digitalWrite(BUZZER_PIN, HIGH);
-  delay(100);
+  delay(300);
 
   //Tat cac canh bao
   digitalWrite(LED_GREEN_PIN, LOW);
   digitalWrite(LED_YELLOW_PIN, LOW);
-  digitalWrite(BUZZER_PIN, LOW);
   digitalWrite(BUZZER_PIN, LOW);
   // delay(50);
 }
@@ -97,6 +96,5 @@ void VeryDangerAir() {
   digitalWrite(LED_GREEN_PIN, LOW);
   digitalWrite(LED_YELLOW_PIN, LOW);
   digitalWrite(LED_RED_PIN, LOW);
-  digitalWrite(BUZZER_PIN, LOW);
   // delay(50);
 }
