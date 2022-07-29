@@ -6,8 +6,8 @@
 #include "LiquidCrystal_I2C.h"
 
 // Declare input ADC pin
-#define  ALCOHOL_PIN    A1 
-#define  GAS_PIN        A2 
+#define  ALCOHOL_PIN      A1 
+#define  GAS_PIN          A2 
 
 //Xac dinh cong ket noi chan LED va BUZZER
 #define LED_RED_PIN       D9
@@ -24,15 +24,20 @@ int alcoValue = 0;
 int alcol_limit1  = 200;
 int gas_limit1    = 600;
 int alcol_limit2 = 150;
-int gas_limit2   = 100;
+int gas_limit2   =100;
 
 void setup(){
     Serial.begin(9600);
     LCD.init();         // Initialize LCD 1602 to display
     LCD.backlight();    // Turn on LCD backlight
+    // Set LED and Buzzer as output pin
+    //Thiet lap LED va BUZZER o trang thai OUTPUT
+    pinMode(LED_RED_PIN, OUTPUT); 
+    pinMode(LED_YELLOW_PIN, OUTPUT);
+    pinMode(LED_GREEN_PIN, OUTPUT);
+    pinMode(BUZZER_PIN, OUTPUT);
 }
 void loop(){
-    
     // Read value (0->1023) from analogPin (A1)
     int gasValue = analogRead(GAS_PIN);
     int alcoValue = analogRead(ALCOHOL_PIN);
@@ -47,18 +52,18 @@ void loop(){
     LCD.print("Alcohol ");
     LCD.setCursor(9, 1);
     LCD.print(alcoValue);
-  if ((alcoValue < alcol_limit2) && (gasValue < gas_limit2)) {
+    if ((alcoValue < alcol_limit2) && (gasValue < gas_limit2)) {
     //Ham trang thai cua LED va Buzzer
     SafeAir();
-  }
-  if (((alcoValue <= alcol_limit1) && (alcoValue > alcol_limit2)) || ((gasValue <= gas_limit1) && (gasValue > gas_limit2))) {
-    //Ham trang thai cua LED va Buzzer
-    DangerAir();
-  }
-  if ((alcoValue > alcol_limit1) && (gasValue > gas_limit1)) {
-    //Ham trang thai cua LED va Buzzer
-    VeryDangerAir();
-  }
+    }
+    if (((alcoValue <= alcol_limit1) && (alcoValue > alcol_limit2)) || ((gasValue <= gas_limit1) && (gasValue > gas_limit2))) {
+      //Ham trang thai cua LED va Buzzer
+      DangerAir();
+    }
+    if ((alcoValue > alcol_limit1) && (gasValue > gas_limit1)) {
+      //Ham trang thai cua LED va Buzzer
+      VeryDangerAir();
+    }
 }
 
 void SafeAir() {
@@ -75,17 +80,16 @@ void DangerAir() {
   digitalWrite(LED_YELLOW_PIN, HIGH);
   digitalWrite(LED_RED_PIN, LOW);
   digitalWrite(BUZZER_PIN, HIGH);
-  delay(100);
+  delay(300);
 
   //Tat cac canh bao
   digitalWrite(LED_GREEN_PIN, LOW);
   digitalWrite(LED_YELLOW_PIN, LOW);
   digitalWrite(BUZZER_PIN, LOW);
-  digitalWrite(BUZZER_PIN, LOW);
   // delay(50);
 }
 
-void VeryDangerAir() {
+void VeryDangerAir(){
   //Bat cac canh bao
   digitalWrite(LED_GREEN_PIN, HIGH);
   digitalWrite(LED_YELLOW_PIN, HIGH);
@@ -97,6 +101,5 @@ void VeryDangerAir() {
   digitalWrite(LED_GREEN_PIN, LOW);
   digitalWrite(LED_YELLOW_PIN, LOW);
   digitalWrite(LED_RED_PIN, LOW);
-  digitalWrite(BUZZER_PIN, LOW);
   // delay(50);
 }
