@@ -1,69 +1,66 @@
 /*
-    How the code work:
-        - Read ADC value (0->1023) from pin A1 => Display on Serial Monitor with Baudrate speed 9600.
+   
 */
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
 
-// Declare input ADC pin
-#define  ALCOHOL_PIN      A1 
-#define  GAS_PIN          A2 
+// Dat ten chan cong ket noi
+#define   ALCOHOL_PIN       A1 
+#define   GAS_PIN           A2 
+#define   BUZZER_PIN        A3
+#define   LED_YELLOW_PIN    D10
+#define   LED_GREEN_PIN     D11
 
-//Xac dinh cong ket noi chan LED va BUZZER
-#define LED_RED_PIN       D9
-#define LED_YELLOW_PIN    D10
-#define LED_GREEN_PIN     D11
-#define BUZZER_PIN        A3
+// Dat cac gia tri nguong 
+#define   ALCOL_LIMIT1      200
+#define   GAS_LIMIT1        600
+#define   ALCOL_LIMIT2      150
+#define   GAS_LIMIT2        100
 
-LiquidCrystal_I2C LCD(0x27, 16, 2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+LiquidCrystal_I2C LCD(0x27, 16, 2); // Thiet lap dia chi LCD 0x27 de hien thi ky tu tren 16 va hai dong
 
+// Khai bao bien 
 int gasValue  = 0;
 int alcoValue = 0;
 
-// Khai bao gia tri nguong 
-int alcol_limit1  = 200;
-int gas_limit1    = 600;
-int alcol_limit2 = 150;
-int gas_limit2   =100;
+void setup() {
+  Serial.begin(9600); 
+  LCD.init();       //Khoi tao LCD 1602 de hien thi
+  LCD.backlight();  //Bat den nen LCD 1602
 
-void setup(){
-    Serial.begin(9600);
-    LCD.init();         // Initialize LCD 1602 to display
-    LCD.backlight();    // Turn on LCD backlight
-    // Set LED and Buzzer as output pin
-    //Thiet lap LED va BUZZER o trang thai OUTPUT
-    pinMode(LED_RED_PIN, OUTPUT); 
-    pinMode(LED_YELLOW_PIN, OUTPUT);
-    pinMode(LED_GREEN_PIN, OUTPUT);
-    pinMode(BUZZER_PIN, OUTPUT);
+  // Thiet lap LED va BUZZER o trang thai OUTPUT
+  pinMode(LED_RED_PIN, OUTPUT); 
+  pinMode(LED_YELLOW_PIN, OUTPUT);
+  pinMode(LED_GREEN_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
 }
-void loop(){
-    // Read value (0->1023) from analogPin (A1)
-    int gasValue = analogRead(GAS_PIN);
-    int alcoValue = analogRead(ALCOHOL_PIN);
-    delay(100); // Wait 100ms then repeat
-    // Display value on LCD
-    // Hien thi gia tri khi gas và nong do con
-    LCD.setCursor(0, 0);
-    LCD.print("Gas ");
-    LCD.setCursor(0, 1);
-    LCD.print(gasValue);
-    LCD.setCursor(9, 0);
-    LCD.print("Alcohol ");
-    LCD.setCursor(9, 1);
-    LCD.print(alcoValue);
-    if ((alcoValue < alcol_limit2) && (gasValue < gas_limit2)) {
-    //Ham trang thai cua LED va Buzzer
-    SafeAir();
-    }
-    if (((alcoValue <= alcol_limit1) && (alcoValue > alcol_limit2)) || ((gasValue <= gas_limit1) && (gasValue > gas_limit2))) {
-      //Ham trang thai cua LED va Buzzer
-      DangerAir();
-    }
-    if ((alcoValue > alcol_limit1) && (gasValue > gas_limit1)) {
-      //Ham trang thai cua LED va Buzzer
-      VeryDangerAir();
-    }
+
+void loop() {
+  // Doc gia tri cam bien tu chan Analog
+  int gasValue = analogRead(GAS_PIN);
+  int alcoValue = analogRead(ALCOHOL_PIN);
+  delay(100); 
+  // Hien thi gia tri khi gas va nong do con
+  LCD.setCursor(0, 0);
+  LCD.print("Gas ");
+  LCD.setCursor(0, 1);
+  LCD.print(gasValue);
+  LCD.setCursor(9, 0);
+  LCD.print("Alcohol ");
+  LCD.setCursor(9, 1);
+  LCD.print(alcoValue);
+  // So sanh cac gia tri nguong 
+  if ((alcoValue < ALCOL_LIMIT2) && (gasValue < GAS_LIMIT2)) {
+    //Ham canh bao trang thai an toan
+  }
+  if (((alcoValue <= ALCOL_LIMIT1) && (alcoValue > ALCOL_LIMIT2)) || ((gasValue <= GAS_LIMIT1) && (gasValue > GAS_LIMIT2))) {
+    //Ham canh bao trang thai nguy hiem
+    DangerAir();
+  }
+  if ((alcoValue > ALCOL_LIMIT1) && (gasValue > GAS_LIMIT1)) {
+    //Ham canh bao trang thai rat nguy hiem
+    VeryDangerAir();
+  }
 }
 
 void SafeAir() {
@@ -89,7 +86,7 @@ void DangerAir() {
   // delay(50);
 }
 
-void VeryDangerAir(){
+void VeryDangerAir() {
   //Bat cac canh bao
   digitalWrite(LED_GREEN_PIN, HIGH);
   digitalWrite(LED_YELLOW_PIN, HIGH);
