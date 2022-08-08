@@ -16,7 +16,7 @@
 #define   ALCOL_LIMIT2      150
 #define   GAS_LIMIT2        100
 // Set the LCD address to 0x27 for a 16 chars and 2 line display
-// Thiet lap dia chi LCD 0x27 de hien thi ky tu LCD 16 ký tự và 2 dòng
+// Thiet lap dia chi LCD 0x27 de hien thi ky tu LCD 16 ky tu và 2 dong
 LiquidCrystal_I2C LCD(0x27, 16, 2); 
 // Declare variables
 // Khai bao bien 
@@ -24,7 +24,7 @@ int gasValue  = 0;
 int alcoValue = 0;
 
 void setup() {
- // We initialize serial connection so that we could print values from sensor
+  // We initialize serial connection so that we could print values from sensor
   // Khoi tao cong ket noi noi tiep
   Serial.begin(9600);
   // Initialize LCD 1602 to display
