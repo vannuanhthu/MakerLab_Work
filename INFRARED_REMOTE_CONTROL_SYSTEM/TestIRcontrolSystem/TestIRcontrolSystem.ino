@@ -24,6 +24,10 @@ const int IR_RECEIVE_PIN = D10;
 void setup()
 {
   Serial.begin(9600);
+  /*
+     * Start the receiver, enable feedback LED and take LED feedback pin from the internal boards definition
+  */
+  IrReceiver.begin(IR_RECEIVE_PIN);
   LCD.init();         // Initialize LCD 1602 to display
   LCD.backlight();    // Turn on LCD backlight
   // Set LED and Buzzer as output pin
