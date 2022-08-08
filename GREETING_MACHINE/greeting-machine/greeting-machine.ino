@@ -4,15 +4,17 @@
 #include "SoftwareSerial.h"
 #include "MKL_DFRobotDFPlayerMini.h"
 
-// Declare input Digital pin
+// Define connected pin
 // Dat ten cong ket noi cho cam bien
 #define  SENSOR1_PIN    D11
 #define  SENSOR2_PIN    D10
 
 // Initialize DFPlayer Mini on the second serial port on RX and TX pins 
+// Khoi tao DFPlayer Mini qua cong ket noi noi tiep tren hai chan RX va TX
 SoftwareSerial mySoftwareSerial(13, 12); 
 DFRobotDFPlayerMini myDFPlayer; 
-// set the LCD address to 0x27 for a 16 chars and 2 line display
+// Set the LCD address to 0x27 for a 16 chars and 2 line display
+// Thiet lap dia chi LCD 0x27 de hien thi 16 ky tu tren hai dong
 LiquidCrystal_I2C LCD(0x27, 16, 2);  
 
 // Declare variables 
@@ -44,7 +46,7 @@ void setup(){
 
 void loop() {
   // Read Sensor Value from digital pin
-  // Doc gia tri cam bien
+  // Doc gia tri cam bien 
   int valueSensor1 = digitalRead(SENSOR1_PIN);
   int valueSensor2 = digitalRead(SENSOR2_PIN);
   for (int i = 0; i < 10; i++) {
@@ -58,45 +60,49 @@ void loop() {
     LCD.print("   ");
     LCD.setCursor(10, 1);
     LCD.print(checkin);
-    
+    // Compare sensor value to play MP3 and display 
     if ((valueSensor1 = digitalRead(SENSOR1_PIN)) == 0) {
-      while (!((valueSensor2 == 0) && (valueSensor1  == 1))) { // Doi den khi doc duoc gia tri
-        // Wait
+      // Wait until read digital sensor value
+      // Doi den khi doc duoc tin hieu tu cam bien
+      while (!((valueSensor2 == 0) && (valueSensor1  == 1))) { 
         valueSensor1 = digitalRead(SENSOR1_PIN);
         valueSensor2 = digitalRead(SENSOR2_PIN);
       }
-
-      myDFPlayer.playMp3Folder(1);  // Phat file am thanh thu nhat 
+      // Play Welcome MP3 file
+      // Phat file am thanh thu nhat 
+      myDFPlayer.playMp3Folder(1);  
       soKhach += 1;
       checkin += 1;
       LCD.setCursor(0, 0);
       LCD.print("MakerLab Welcome");
       delay(1000);
-
-      while (!((valueSensor2 == 1) && (valueSensor1  == 1))) { // Doi den khi doc duoc gia tri
-        // Wait
+      // Wait until read digital sensor value
+      // Doi den khi doc duoc tin hieu tu cam bien
+      while (!((valueSensor2 == 1) && (valueSensor1  == 1))) {  
         valueSensor1 = digitalRead(SENSOR1_PIN);
         valueSensor2 = digitalRead(SENSOR2_PIN);
       } 
     }
     
     if ((valueSensor2 = digitalRead(SENSOR2_PIN)) == 0) {
-      while (!((valueSensor2 == 1) && (valueSensor1  == 0))) { // Doi den khi doc duoc gia tri
-        // Wait
+      // Wait until read digital sensor value
+      // Doi den khi doc duoc tin hieu tu cam bien
+      while (!((valueSensor2 == 1) && (valueSensor1  == 0))) { 
         valueSensor1 = digitalRead(SENSOR1_PIN);
         valueSensor2 = digitalRead(SENSOR2_PIN);
       }
-
-      myDFPlayer.playMp3Folder(2); // Phat file am thanh thu hai
-
+      // Play Goodbye MP3 file
+      // Phat file am thanh thu hai
+      myDFPlayer.playMp3Folder(2); 
       if (soKhach > 0) {
         soKhach -= 1;
       }
       LCD.setCursor(0, 0);
       LCD.print("MakerLab Goodbye"); 
       delay(1000);      
-      while (!!((valueSensor2 == 1) && (valueSensor1  == 0))) { // Doi den khi doc duoc gia tri
-         // Wait
+      // Wait until read digital sensor value
+      // Doi den khi doc duoc tin hieu tu cam bien
+      while (!!((valueSensor2 == 1) && (valueSensor1  == 0))) { 
         valueSensor1 = digitalRead(SENSOR1_PIN);
         valueSensor2 = digitalRead(SENSOR2_PIN);
       }

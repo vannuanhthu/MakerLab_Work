@@ -1,40 +1,60 @@
 
 // Date and time functions using a DS3231 RTC connected via I2C and Wire lib
+// Xac dinh thoi gian ngay va gio su dung thu vien DS3231 RTC ket noi thong qua I2C va Wire
 #include "RTClib.h"
 // Note music for Buzzer
+// Thu vien Note cho Buzzer
 #include "Note.h"
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
 #include "DHT.h"
 
-LiquidCrystal_I2C LCD(0x27, 16, 2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
-
+// Set the LCD address to 0x27 for a 16 chars and 2 line display
+// Thiet lap dia chi LCD 0x27 de hien thi 16 ky tu tren hai dong
+LiquidCrystal_I2C LCD(0x27, 16, 2); 
+ 
+// Define connected pin
+// Dat ten chan cong ket noi
 #define AIR_SENSOR_PIN  A1
 #define BUTTON_PIN      A2
 #define BUZZER_PIN      D9
 #define FAN_PIN         D10
 
-#define DHTPIN D11     // Digital pin connected to the DHT sensor
-#define DHTTYPE DHT11   // DHT 11
-DHT dht(DHTPIN, DHTTYPE);
+ // Digital pin connected to the DHT sensor
+ // Ket noi chan tin hieu Digital cho cam bien DHT
+#define DHTPIN          D11     
+#define DHTTYPE         DHT11   // DHT 11
 
+DHT dht(DHTPIN, DHTTYPE);
 RTC_DS3231 rtc;
+
 char daysOfTheWeek[7][12] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 unsigned int rtcDay, rtcMonth, rtcYear;
 unsigned int rtcSecond, rtcMinute, rtcHour;
 unsigned int alarmSecond, alarmcMinute, alarmHour;
-int Display = 0;       // Set value state for push button
+// Set value state for push button
+// Dat gia tri cho nut nhan
+int Display = 0;       
 float AirValue = 0;
-float Air_Limit = 20;   // Set air quality limit
+// Set air quality limit
+// Dat gia tri nguong
+float Air_Limit = 20;   
 float temperature;
 float humidity;
 
 void setup () {
+  // We initialize serial connection so that we could print values from sensor
+  // Khoi tao cong ket noi noi tiep
   Serial.begin(9600);
   dht.begin();
-  LCD.init();         // Initialize LCD 1602 to display
-  LCD.backlight();    // Turn on LCD backlight
-
+  // Initialize LCD 1602 to display
+  // Khoi tao LCD 1602 de hien thi
+  LCD.init();        
+  // Turn on LCD backlight   
+  // Bat den nen LCD 1602  
+  LCD.backlight();    
+   // Set Pin as Output pin or Input pin
+  // Thiet lap trang thai cac chan ket noi
   pinMode(BUTTON_PIN, INPUT_PULLUP);
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(FAN_PIN, OUTPUT);
@@ -47,8 +67,8 @@ void setup () {
 
   if (rtc.lostPower()) {
     Serial.println("RTC lost power, let's set the time!");
-    // When time needs to be set on a new device, or after a power loss, the
-    // following line sets the RTC to the date & time this sketch was compiled
+    // When time needs to be set on a new device, or after a power loss, 
+    // the following line sets the RTC to the date & time this sketch was compiled
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // This line sets the RTC with an explicit date & time, for example to set
     // January 21, 2014 at 3am you would call:
@@ -76,14 +96,15 @@ void loop () {
     analogWrite(FAN_PIN, 0);    // Turn off fan
   }
 
-  int btnState = digitalRead(BUTTON_PIN);
-  if (btnState == 0) {  // Button was clicked
+  int btnState = digitalRead(BUTTON_PIN); 
+  // Button was clicked
+  if (btnState == 0) { 
     if (Display == 0) {
       Display = 1;
       LCD.clear();
     }
     else {
-      if (Display == 1) {
+      if (Display == 1) { 
       Display = 2;
       LCD.clear();
       }
@@ -102,13 +123,12 @@ void loop () {
   rtcMinute = now.minute();
   rtcHour = now.hour();
   if (Display == 0) {
-    // Print RTC Time
+    // Print RTC Time at column 5 and row 1
     LCD.setCursor(4, 0);
     if (rtcHour < 10) {
       LCD.print("0");
       LCD.print(rtcHour);
-    } 
-    else {
+    } else {
       LCD.print(rtcHour);
     }
     LCD.print(":");
@@ -116,8 +136,7 @@ void loop () {
     if (rtcMinute < 10) {
       LCD.print("0");
       LCD.print(rtcMinute);
-    } 
-    else {
+    } else {
       LCD.print(rtcMinute);
     }
     LCD.print(":");
@@ -125,20 +144,18 @@ void loop () {
     if (rtcSecond < 10) {
       LCD.print("0");
       LCD.print(rtcSecond);
-    } 
-    else {
+    } else {
       LCD.print(rtcSecond);
     }
 
-    // Print RTC Date
+    // Print RTC Date at column 2 and row 2
     LCD.setCursor(1, 1);
     LCD.print(daysOfTheWeek[now.dayOfTheWeek()]);
     LCD.print(",");
     if (rtcDay < 10) {
       LCD.print("0");
       LCD.print(rtcDay);
-    } 
-    else {
+    } else {
       LCD.print(rtcDay);
     }
     LCD.print("/");
@@ -146,23 +163,20 @@ void loop () {
     if (rtcMonth < 10) {
       LCD.print("0");
       LCD.print(rtcMonth);
-    } 
-    else {
+    } else {
       LCD.print(rtcMonth);
     }
     LCD.print("/");
 
     LCD.print(rtcYear);
-  }
-  else {
+  } else {
     if (Display == 1) {
-      // Print RTC Time
+      // Print RTC Time at column 5 and row 1
       LCD.setCursor(4, 0);
       if (rtcHour < 10) {
         LCD.print("0");
         LCD.print(rtcHour);
-      } 
-      else {
+      } else {
         LCD.print(rtcHour);
       }
       LCD.print(":");
@@ -170,8 +184,7 @@ void loop () {
       if (rtcMinute < 10) {
         LCD.print("0");
         LCD.print(rtcMinute);
-      } 
-      else {
+      } else {
         LCD.print(rtcMinute);
       }
       LCD.print(":");
@@ -179,24 +192,21 @@ void loop () {
       if (rtcSecond < 10) {
         LCD.print("0");
         LCD.print(rtcSecond);
-      } 
-      else {
+      } else {
         LCD.print(rtcSecond);
       }
 
-      // Print Air quality
+      // Print Air quality at column 2 and row 2
       LCD.setCursor(1, 1);
       LCD.print("Air: ");
       LCD.print(AirValue);
-    }
-    else {
-      // Print RTC Time
+    } else {
+      // Print RTC Time at column 5 and row 1
       LCD.setCursor(4, 0);
       if (rtcHour < 10) {
         LCD.print("0");
         LCD.print(rtcHour);
-      } 
-      else {
+      } else {
         LCD.print(rtcHour);
       }
       LCD.print(":");
@@ -204,8 +214,7 @@ void loop () {
       if (rtcMinute < 10) {
         LCD.print("0");
         LCD.print(rtcMinute);
-      } 
-      else {
+      } else {
         LCD.print(rtcMinute);
       }
       LCD.print(":");
@@ -213,14 +222,13 @@ void loop () {
       if (rtcSecond < 10) {
         LCD.print("0");
         LCD.print(rtcSecond);
-      } 
-      else {
+      } else {
         LCD.print(rtcSecond);
       }
 
       temperature = dht.readTemperature();
       humidity = dht.readHumidity();
-      // Print Air quality
+      // Print Air quality at column 2 and row 2
       LCD.setCursor(1, 1);
       LCD.print(temperature);
       char degreeChar = 223;

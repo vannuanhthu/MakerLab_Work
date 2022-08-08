@@ -2,7 +2,6 @@
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
 
-
 // Define connected pin
 // Dat ten chan cong ket noi
 #define LDR_PIN         A3
@@ -25,7 +24,7 @@ void setup() {
   // Turn on LCD backlight   
   // Bat den nen LCD 1602   
   LCD.backlight(); 
-  // Set LED and BUZZER Pin as Output
+  // Set LED and BUZZER Pin as Output pin
   // Thiet lap LED va BUZZER o trang thai OUTPUT
   pinMode(LED_RED_PIN, OUTPUT);
   pinMode(LED_YELLOW_PIN, OUTPUT);
@@ -34,8 +33,8 @@ void setup() {
 }
 
 void loop() {
-  // Turn on Green Light and countdown 7s
-  // Dem nguoc den xanh 7s
+  // Turn on Green Light and countdown 7 seconds
+  // Dem nguoc den xanh 7 giay
   digitalWrite(LED_GREEN_PIN, HIGH);
   digitalWrite(LED_YELLOW_PIN, LOW);
   digitalWrite(LED_RED_PIN, LOW);
@@ -67,8 +66,8 @@ void loop() {
     count1 -= 1;
   }
   count1 = 0;
-  // Turn on Yellow Light and countdown 3s
-  // Dem nguoc den vang 3s
+  // Turn on Yellow Light and countdown 3 seconds
+  // Dem nguoc den vang 3 giay
   digitalWrite(LED_GREEN_PIN, LOW);
   digitalWrite(LED_YELLOW_PIN, HIGH);
   digitalWrite(LED_RED_PIN, LOW);
@@ -100,8 +99,8 @@ void loop() {
     count2 -= 1;
   }
   count2 = 0;
-  // Turn on Red Light and countdown 10s
-  // Dem nguoc den do 10s
+  // Turn on Red Light and countdown 10 seconds
+  // Dem nguoc den do 10 giay
   digitalWrite(LED_GREEN_PIN, LOW);
   digitalWrite(LED_YELLOW_PIN, LOW);
   digitalWrite(LED_RED_PIN, HIGH);
