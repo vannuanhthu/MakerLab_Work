@@ -6,9 +6,6 @@
 
 LiquidCrystal_I2C LCD(0x27, 16, 2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
-#define TRIG_PIN  13
-#define ECHO_PIN  12
-
 // Define connected pin
 // Dat ten cong ket noi chan LED va BUZZER
 #define LED_RED_PIN       A1
@@ -24,10 +21,6 @@ const int IR_RECEIVE_PIN = D10;
 void setup()
 {
   Serial.begin(9600);
-  /*
-     * Start the receiver, enable feedback LED and take LED feedback pin from the internal boards definition
-  */
-  IrReceiver.begin(IR_RECEIVE_PIN);
   LCD.init();         // Initialize LCD 1602 to display
   LCD.backlight();    // Turn on LCD backlight
   // Set LED and Buzzer as output pin
@@ -36,6 +29,14 @@ void setup()
   pinMode(LED_YELLOW_PIN, OUTPUT);
   pinMode(LED_GREEN_PIN, OUTPUT);
   pinMode(FAN_PIN, OUTPUT);
+  
+  // Start the receiver
+  // Nhan tin hieu hong ngoai va kiem tra tin hieu
+  IrReceiver.begin(IR_RECEIVE_PIN);
+  Serial.print(F("Ready to receive IR signals of protocols: "));
+  printActiveIRProtocols(&Serial);
+  Serial.print(F("at pin "));
+  Serial.println(IR_RECEIVE_PIN);
 }
 
 void loop()
