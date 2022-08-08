@@ -1,4 +1,3 @@
-
 // Date and time functions using a DS3231 RTC connected via I2C and Wire lib
 // Xac dinh thoi gian ngay va gio su dung thu vien DS3231 RTC ket noi thong qua I2C va Wire
 #include "RTClib.h"
@@ -69,6 +68,7 @@ void setup () {
     Serial.println("RTC lost power, let's set the time!");
     // When time needs to be set on a new device, or after a power loss, 
     // the following line sets the RTC to the date & time this sketch was compiled
+    // Thiet lap thoi gian cho RTC tai thoi diem nap chuong trinh
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // This line sets the RTC with an explicit date & time, for example to set
     // January 21, 2014 at 3am you would call:
@@ -78,26 +78,35 @@ void setup () {
   rtc.clearAlarm(1);
   // stop oscillating signals at SQW Pin
   // otherwise setAlarm1 will fail
+  // Dung tin hieu dao dong tai chan SQW, neu khong se khong setAlarm1 duoc 
   rtc.writeSqwPinMode(DS3231_OFF);
   if (!rtc.setAlarm1(
         rtc.now() + TimeSpan(20),
-        DS3231_A1_Second // this mode triggers the alarm when the seconds match. See Doxygen for other options
+        DS3231_A1_Second 
+        // This mode triggers the alarm when the seconds match. See Doxygen for other options
+        // Che do nay se kich hoat bao thuc khi da dung thoi gian. Xem Doxygen de biet cac lua chon khac 
       )) {
     // Do nothing
   }
 }
 
 void loop () {
+  // Doc gia tri cam bien
   AirValue = analogRead(AIR_SENSOR_PIN);
   if (AirValue > Air_Limit) {
-    analogWrite(FAN_PIN, 50 * 255 / 100); // 50% duty cycle of PWM
+    // 50% duty cycle of PWM
+    // Dat gia tri PWM 50%
+    analogWrite(FAN_PIN, 50 * 255 / 100); 
   }
   else {
-    analogWrite(FAN_PIN, 0);    // Turn off fan
+    // Turn off fan
+    // Tat quat
+    analogWrite(FAN_PIN, 0);    
   }
 
   int btnState = digitalRead(BUTTON_PIN); 
   // Button was clicked
+  // Khi nhan nut Button
   if (btnState == 0) { 
     if (Display == 0) {
       Display = 1;
@@ -124,6 +133,7 @@ void loop () {
   rtcHour = now.hour();
   if (Display == 0) {
     // Print RTC Time at column 5 and row 1
+    // Hien thi thoi gian tai cot 5 hang 1
     LCD.setCursor(4, 0);
     if (rtcHour < 10) {
       LCD.print("0");
@@ -149,6 +159,7 @@ void loop () {
     }
 
     // Print RTC Date at column 2 and row 2
+    // Hien thi ngay tai cot 2 hang 2
     LCD.setCursor(1, 1);
     LCD.print(daysOfTheWeek[now.dayOfTheWeek()]);
     LCD.print(",");
@@ -172,6 +183,7 @@ void loop () {
   } else {
     if (Display == 1) {
       // Print RTC Time at column 5 and row 1
+      // Hien thi thoi gian tai cot 5 hang 1
       LCD.setCursor(4, 0);
       if (rtcHour < 10) {
         LCD.print("0");
@@ -197,11 +209,13 @@ void loop () {
       }
 
       // Print Air quality at column 2 and row 2
+      // Hien thi gia tri cam bien khong khi tai cot 2 hang 2
       LCD.setCursor(1, 1);
       LCD.print("Air: ");
       LCD.print(AirValue);
     } else {
       // Print RTC Time at column 5 and row 1
+      // Hien thi thoi gian tai cot 5 hang 1
       LCD.setCursor(4, 0);
       if (rtcHour < 10) {
         LCD.print("0");
@@ -229,6 +243,7 @@ void loop () {
       temperature = dht.readTemperature();
       humidity = dht.readHumidity();
       // Print Air quality at column 2 and row 2
+      // Hien thi gia tri cam bien khong khi tai cot 2 hang 2
       LCD.setCursor(1, 1);
       LCD.print(temperature);
       char degreeChar = 223;

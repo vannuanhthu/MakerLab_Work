@@ -1,4 +1,5 @@
 // Include library
+// Cai dat thu vien
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
 
@@ -41,7 +42,7 @@ void loop() {
   int count1 = 7;
   for (int i = 0; i < 7; i++) {
     for (int j = 0; j < 10; j++) {
-      int LRDValue = analogRead(LDR_PIN); //
+      int LDRValue = analogRead(LDR_PIN); //
       LCD.setCursor(0, 0);
       LCD.print("TRAFFIC");
       LCD.setCursor(8, 0);
@@ -53,10 +54,10 @@ void loop() {
       LCD.setCursor(8, 1);
       LCD.print("|");
       LCD.setCursor(10, 1);
-      LCD.print((LRDValue));
+      LCD.print((LDRValue));
       LCD.print(("  "));
       //
-      if (LRDValue > 150) {
+      if (LDRValue > 150) {
         digitalWrite(LED_STREET_PIN, HIGH);
       } else {
         digitalWrite(LED_STREET_PIN, LOW);
@@ -74,7 +75,7 @@ void loop() {
   int count2 = 3;
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 10; j++) {
-      int LRDValue = analogRead(LDR_PIN); //
+      int LDRValue = analogRead(LDR_PIN); //
       LCD.setCursor(0, 0);
       LCD.print("TRAFFIC");
       LCD.setCursor(8, 0);
@@ -86,10 +87,10 @@ void loop() {
       LCD.setCursor(8, 1);
       LCD.print("|");
       LCD.setCursor(10, 1);
-      LCD.print((LRDValue));
+      LCD.print((LDRValue));
       LCD.print(("  "));
       //
-      if (LRDValue > 150) {
+      if (LDRValue > 150) {
         digitalWrite(LED_STREET_PIN, HIGH);
       } else {
         digitalWrite(LED_STREET_PIN, LOW);
@@ -108,7 +109,7 @@ void loop() {
   for (int i = 0; i < 10; i++) {
     LCD.clear();
     for (int j = 0; j < 10; j++) {
-      int LRDValue = analogRead(LDR_PIN);//
+      int LDRValue = analogRead(LDR_PIN);//
       LCD.setCursor(0, 0);
       LCD.print("TRAFFIC ");
       LCD.setCursor(8, 0);
@@ -120,10 +121,10 @@ void loop() {
       LCD.setCursor(8, 1);
       LCD.print("| ");
       LCD.setCursor(10, 1);
-      LCD.print((LRDValue));
+      LCD.print((LDRValue));
       LCD.print(("  "));
       //
-      if (LRDValue > 150) {
+      if (LDRValue > 150) {
         digitalWrite(LED_STREET_PIN, HIGH);
       } else {
         digitalWrite(LED_STREET_PIN, LOW);

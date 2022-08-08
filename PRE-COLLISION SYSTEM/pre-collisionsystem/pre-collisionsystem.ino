@@ -1,5 +1,5 @@
-
 // Include library
+// Cai dat thu vien
 #include "UltraSonicDistanceSensor.h"
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
@@ -19,64 +19,17 @@
 #define int_danger_dist   25
 #define int_crash_dist    10
 
-UltraSonicDistanceSensor distanceSensor(TRIG_PIN, ECHO_PIN);  // Initialize sensor that uses digital pins 13 and 12 // Khoi tao chan ket noi digital 12 va 13 cho cam bien sieu am
+// Initialize sensor that uses digital pins 13 and 12
+// Khoi tao chan ket noi digital 12 va 13 cho cam bien sieu am
+UltraSonicDistanceSensor distanceSensor(TRIG_PIN, ECHO_PIN);   
 
-LiquidCrystal_I2C LCD(0x27, 16, 2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+// Set the LCD address to 0x27 for a 16 chars and 2 line display
+// Thiet lap dia chi LCD 0x27 de hien thi ky tu LCD 16 ky tu và 2 dong
+LiquidCrystal_I2C LCD(0x27, 16, 2);  
 
+// Declare variables 
 // Khai bao bien
 int int_dist = 0;
-
-void setup() {
-  // We initialize serial connection so that we could print values from sensor
-  Serial.begin(9600); 
-  // Initialize LCD 1602 to display
-  // Khoi tao LCD 1602 de hien thi
-  LCD.init();    
-  // Turn on LCD backlight  
-  // Bat den nen LCD 1602    
-  LCD.backlight();    
-  // Set LED and Buzzer as output pin
-  // Thiet lap LED va BUZZER o trang thai OUTPUT
-  pinMode(LED_RED_PIN, OUTPUT); 
-  pinMode(LED_GREEN_PIN, OUTPUT);
-  pinMode(BUZZER_PIN, OUTPUT);
-}
-
-void loop() {
-  // Every 500 miliseconds, do a measurement using the sensor and print the distance in centimeters
-  // Moi 500ms tien hanh do va hien thi khoang cach 1 lan
-  delay(500);
-  if (distanceSensor.available() == true) {
-    // Print distance measured by sensor at column 1 and row 1
-    LCD.setCursor(0, 0);
-    int_dist = floor(distanceSensor.getcm());
-    LCD.print("Distance: ");
-    LCD.print(int_dist);
-    LCD.print("cm");
-    LCD.setCursor(0, 1);
-  }
-  // Print status of distance
-  if (int_dist > int_safe_dist) {
-    LCD.print("AN TOAN      "); 
-    SafeDist();
-  }
-
-  if ((int_dist <= int_safe_dist) && (int_dist > int_danger_dist)) {
-    //LCD.setCursor(0, 1);
-    LCD.print("CO VAT CAN  ");
-    DangerDist1();
-  }
-
-  if ((int_dist <= int_danger_dist) && (int_dist > int_crash_dist)) {
-    LCD.print("SAP VA CHAM  ");
-    DangerDist2();
-  }
-
-  if (int_dist <= int_crash_dist) {
-    LCD.print("VA CHAM      ");
-    CrashDist();
-  }
-}
 
 void SafeDist() {
   // Turn off warning Led
@@ -137,4 +90,59 @@ void CrashDist() {
   // Set PWM value
   // Dat gia tri PWM de dieu chinh am luong BUZZER 100%
   analogWrite(BUZZER_PIN, 255); 
+}
+
+void setup() {
+  // We initialize serial connection so that we could print values from sensor
+  // Khoi tao cong ket noi noi tiep
+  Serial.begin(9600); 
+  // Initialize LCD 1602 to display
+  // Khoi tao LCD 1602 de hien thi
+  LCD.init();    
+  // Turn on LCD backlight  
+  // Bat den nen LCD 1602    
+  LCD.backlight();    
+  // Set LED and Buzzer as output pin
+  // Thiet lap LED va BUZZER o trang thai OUTPUT
+  pinMode(LED_RED_PIN, OUTPUT); 
+  pinMode(LED_GREEN_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+}
+
+void loop() {
+  // Every 500 miliseconds, do a measurement using the sensor and print the distance in centimeters
+  // Moi 500ms tien hanh do va hien thi khoang cach 1 lan
+  delay(500);
+  if (distanceSensor.available() == true) {
+    // Print distance measured by sensor at column 1 and row 1
+    // Hien thi gia tri khoang cach tai cot 1 hang 1
+    LCD.setCursor(0, 0);
+    int_dist = floor(distanceSensor.getcm());
+    LCD.print("Distance: ");
+    LCD.print(int_dist);
+    LCD.print("cm");
+    LCD.setCursor(0, 1);
+  }
+  // Print status of distance
+  // Hien thi trang thaii khoang cach
+  if (int_dist > int_safe_dist) {
+    LCD.print("AN TOAN      "); 
+    SafeDist();
+  }
+
+  if ((int_dist <= int_safe_dist) && (int_dist > int_danger_dist)) {
+    //LCD.setCursor(0, 1);
+    LCD.print("CO VAT CAN  ");
+    DangerDist1();
+  }
+
+  if ((int_dist <= int_danger_dist) && (int_dist > int_crash_dist)) {
+    LCD.print("SAP VA CHAM  ");
+    DangerDist2();
+  }
+
+  if (int_dist <= int_crash_dist) {
+    LCD.print("VA CHAM      ");
+    CrashDist();
+  }
 }

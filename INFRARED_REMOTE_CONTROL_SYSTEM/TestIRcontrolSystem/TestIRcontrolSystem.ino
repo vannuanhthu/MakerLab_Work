@@ -1,10 +1,13 @@
 // Include library
+// Cai dat thu vien
 #include <Arduino.h>
 #include <IRremote.hpp>
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
 
-LiquidCrystal_I2C LCD(0x27, 16, 2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+// set the LCD address to 0x27 for a 16 chars and 2 line display
+// Thiet lap dia chi LCD 0x27 de hien thi ky tu LCD 16 ky tu và 2 dong
+LiquidCrystal_I2C LCD(0x27, 16, 2);  
 
 // Define connected pin
 // Dat ten cong ket noi chan LED va BUZZER
@@ -13,18 +16,22 @@ LiquidCrystal_I2C LCD(0x27, 16, 2);  // set the LCD address to 0x27 for a 16 cha
 #define LED_GREEN_PIN     A3
 #define FAN_PIN           D9
 
-
 // Infrared Radiation received signal on pin D10
 // Chan do tin hieu hong ngoai D10
 const int IR_RECEIVE_PIN = D10;
 
-void setup()
-{
+void setup() {
+  // We initialize serial connection so that we could print values from sensor
+  // Khoi tao cong ket noi noi tiep
   Serial.begin(9600);
-  LCD.init();         // Initialize LCD 1602 to display
-  LCD.backlight();    // Turn on LCD backlight
-  // Set LED and Buzzer as output pin
-  // Thiet lap LED va BUZZER la chan tin hieu ra
+  // Initialize LCD 1602 to display
+  // Khoi tao LCD 1602 de hien thi
+  LCD.init();      
+  // Turn on LCD backlight  
+  // Bat den nen LCD 1602    
+  LCD.backlight();   
+  // Set connected pin as output pin
+  // Thiet lap cong ket noi la chan tin hieu ra
   pinMode(LED_RED_PIN, OUTPUT);
   pinMode(LED_YELLOW_PIN, OUTPUT);
   pinMode(LED_GREEN_PIN, OUTPUT);
@@ -44,15 +51,20 @@ void loop()
   if (IrReceiver.decode())
   {
     // Print a short summary of received data
+    // In ra gia tri tong cua du lieu da nhan duoc
+    
     // IrReceiver.printIRResultShort(&Serial);
     if (IrReceiver.decodedIRData.protocol == UNKNOWN)
     {
       // We have an unknown protocol here, print more info
       // IrReceiver.printIRResultRawFormatted(&Serial, true);
     }
-    IrReceiver.resume(); // Enable receiving of the next value
+    // Enable receiving of the next value
+    // Cho phep tiep tuc nhan gia tri tiep theo
+    IrReceiver.resume(); 
 
       // Finally, check the received data and perform actions according to the received command
+      // Cuoi cung, kiem tra du lieu da nhan va thuc hien cac hoat dong theo lenh da nhan
     if (IrReceiver.decodedIRData.command == 0x0c)
     {
        // Set PWM 25%
